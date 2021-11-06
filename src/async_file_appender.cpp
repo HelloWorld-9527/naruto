@@ -13,12 +13,15 @@ namespace hardcode {
 namespace naruto {
 
 AsyncFileAppender::AsyncFileAppender(const std::string &basename)
-    : started_(false), running_(false),
-      persist_period_(kLogConfig.file_option.log_flush_interval),
-      basename_(basename), cond_(mutex_), countdown_latch_(1),
-      persit_thread_(std::bind(&AsyncFileAppender::threadFunc, this),
-                     "AsyncLogging"),
-      cur_buffer_(new LogBuffer(kLogConfig.log_buffer_size)) {
+    : started_(false), 
+      running_(false),
+      persist_period_(kLogConfig.file_option.log_flush_interval), // 日志间隔的初始化
+      basename_(basename),
+      cond_(mutex_),
+      countdown_latch_(1),
+      persit_thread_(std::bind(&AsyncFileAppender::threadFunc, this), "AsyncLogging"),
+      cur_buffer_(new LogBuffer(kLogConfig.log_buffer_size)) // 
+{
   mkdir(basename_.c_str(), 0755);
   start();
 }
